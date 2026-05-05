@@ -74,7 +74,7 @@ def save_bot_message(user_id, chat_id, message_id):
 
 
 def delete_all_bot_messages(user_id, chat_id):
-    """Удаляет все сообщения бота для пользователя"""
+    
     key = f"{user_id}_{chat_id}"
     if key in bot_message_storage:
         for message_id in bot_message_storage[key]:
@@ -142,7 +142,7 @@ def on_click(message):
             minutes_left = time_left // 60
             seconds_left = time_left % 60
             bot.send_message(message.chat.id,
-                             f'⏳ Вы не можете сделать заказ сейчас. Подождите еще {minutes_left} минут {seconds_left} секунд.')
+                             f' Вы не можете сделать заказ сейчас. Подождите еще {minutes_left} минут {seconds_left} секунд.')
 
     else:
         send_and_save_message(message.chat.id, 'такой функция нета', message.from_user.id)
@@ -250,11 +250,10 @@ def handle_callback(call):
             bot1.send_message(call.message.chat.id,
                               f' Новый заказ!\n\nДетали:\n{order_details}\n\n Итого: {total} рублей')
 
-            # Очищаем заказ пользователя
+            
             user_orders[call.message.chat.id] = []
 
         else:
-            # Если заказ пуст, тоже очищаем сообщения
             delete_all_bot_messages(call.from_user.id, call.message.chat.id)
             bot.send_message(call.message.chat.id, ' Ваш заказ пуст.')
 
