@@ -9,3 +9,5 @@ main_reply = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text="кнопка 1"),KeyboardButton(text="кнопка 2")],
     [KeyboardButton(text="кнопка 3")]
 ])
+
+contact = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="отправить номер",request_contact=True)]])
