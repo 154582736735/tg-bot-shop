@@ -36,7 +36,7 @@ Telegram бот с формой регистрации. Пользователь
 ## Структура проекта
 
 project/
--run.py           # точка входа
--config.py        # токен
--handlers.py      # обработчики команд
-- keyboards.py     # клавиатуры
+run.py-            # точка входа
+config.py -        # токен
+handlers.py -      # обработчики команд
+keyboards.py -     # клавиатуры
