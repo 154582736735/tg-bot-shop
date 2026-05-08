@@ -1,0 +1,51 @@
+import aiosqlite
+
+
+async def init_db():
+    async with aiosqlite.connect("idea.db") as db:
+        await db.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER,
+                username TEXT,
+                idea TEXT,
+                count_ideas INTEGER DEFAULT 3
+            )
+        """)
+        await db.commit()
+
+
+async def add(user_id, username, idea):
+    async with aiosqlite.connect("idea.db") as db:
+        cursor = await db.execute(
+            "SELECT count_ideas FROM users WHERE user_id = ? ORDER BY id DESC LIMIT 1",
+            (user_id,)
+        )
+        row = await cursor.fetchone()
+
+        if row is None:
+            await db.execute(
+                "INSERT INTO users (user_id, username, idea, count_ideas) VALUES (?, ?, ?, 2)",
+                (user_id, username, idea)
+            )
+        else:
+            current_count = row[0]
+            if current_count > 0:
+                await db.execute(
+                    "INSERT INTO users (user_id, username, idea, count_ideas) VALUES (?, ?, ?, ?)",
+                    (user_id, username, idea, current_count - 1)
+                )
+            else:
+                await db.commit()
+                return False
+        await db.commit()
+        return True
+
+
+async def read(db_id):
+    async with aiosqlite.connect("idea.db") as db:
+        cursor = await db.execute(
+            "SELECT user_id, username, idea, count_ideas FROM users WHERE id = ?",
+            (db_id,)
+        )
+        return await cursor.fetchone()
